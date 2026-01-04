@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Финатлон - Регистрация</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <a href="index.html"><img src="https://via.placeholder.com/40/ff5d00/ffffff?text=F" alt="Логотип"> <span>Финатлон</span></a>
+            </div>
+            
+            <a href="index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i>
+                <span>На главную</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Основной контент регистрации -->
+    <main class="registration-wrapper">
+        <div class="container registration-container">
+            <div class="registration-card">
+                <div class="registration-header">
+                    <h1>Регистрация в Финатлон</h1>
+                    <p>Присоединяйтесь к платформе мероприятий для студентов, родителей и учителей</p>
+                </div>
+                
+                <div class="registration-content">
+                    <!-- Шаги регистрации -->
+                    <div class="registration-steps">
+                        <div class="step active" id="step1">
+                            <div class="step-number">1</div>
+                            <div class="step-label">Выбор типа</div>
+                        </div>
+                        <div class="step" id="step2">
+                            <div class="step-number">2</div>
+                            <div class="step-label">Основные данные</div>
+                        </div>
+                        <div class="step" id="step3">
+                            <div class="step-number">3</div>
+                            <div class="step-label">Завершение</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Прогресс бар -->
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span>Шаг 1 из 3</span>
+                            <span id="progressPercent">33%</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Шаг 1: Выбор типа пользователя -->
+                    <form id="registrationForm">
+                        <div class="form-step active" id="step1Form">
+                            <h2 class="section-title">Кто вы?</h2>
+                            <p style="text-align: center; margin-bottom: 30px; color: #666;">Выберите ваш тип аккаунта для персонализации опыта</p>
+                            
+                            <div class="user-type-selector">
+                                <div class="user-type-card" data-type="student">
+                                    <div class="user-type-icon">
+                                        <i class="fas fa-graduation-cap"></i>
+                                    </div>
+                                    <div class="user-type-title">Студент</div>
+                                    <div class="user-type-description">
+                                        Участие в олимпиадах, конкурсах, хакатонах. Отслеживание мероприятий и результатов.
+                                    </div>
+                                </div>
+                                
+                                <div class="user-type-card" data-type="parent">
+                                    <div class="user-type-icon">
+                                        <i class="fas fa-user-friends"></i>
+                                    </div>
+                                    <div class="user-type-title">Родитель</div>
+                                    <div class="user-type-description">
+                                        Контроль участия ребенка, уведомления о мероприятиях, просмотр результатов.
+                                    </div>
+                                </div>
+                                
+                                <div class="user-type-card" data-type="teacher">
+                                    <div class="user-type-icon">
+                                        <i class="fas fa-chalkboard-teacher"></i>
+                                    </div>
+                                    <div class="user-type-title">Учитель</div>
+                                    <div class="user-type-description">
+                                        Организация мероприятий для учеников, доступ к методическим материалам.
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <input type="hidden" id="userType" name="userType" value="">
+                            
+                            <div class="form-navigation">
+                                <div></div> <!-- Пустой div для выравнивания -->
+                                <button type="button" class="btn" id="nextStep1">Далее</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Шаг 2: Основные данные -->
+                        <div class="form-step" id="step2Form">
+                            <h2 class="section-title">Основные данные</h2>
+                            <p style="text-align: center; margin-bottom: 30px; color: #666;">Заполните информацию о себе</p>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="fullName" class="required">ФИО</label>
+                                    <input type="text" id="fullName" name="fullName" class="form-control" placeholder="Иванов Иван Иванович">
+                                    <div class="error-message" id="fullNameError">Пожалуйста, введите ваше ФИО</div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="email" class="required">Email</label>
+                                    <input type="email" id="email" name="email" class="form-control" placeholder="example@mail.ru">
+                                    <div class="error-message" id="emailError">Пожалуйста, введите корректный email</div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="phone" class="required">Телефон</label>
+                                    <input type="tel" id="phone" name="phone" class="form-control" placeholder="+7 (999) 123-45-67">
+                                    <div class="error-message" id="phoneError">Пожалуйста, введите номер телефона</div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="birthDate" class="required">Дата рождения</label>
+                                    <input type="date" id="birthDate" name="birthDate" class="form-control">
+                                    <div class="error-message" id="birthDateError">Пожалуйста, введите дату рождения</div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="city" class="required">Город</label>
+                                    <input type="text" id="city" name="city" class="form-control" placeholder="Москва">
+                                    <div class="error-message" id="cityError">Пожалуйста, введите город</div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="institution" class="required">Учебное заведение</label>
+                                    <input type="text" id="institution" name="institution" class="form-control" placeholder="Школа №123 / МГУ им. Ломоносова">
+                                    <div class="error-message" id="institutionError">Пожалуйста, введите учебное заведение</div>
+                                    <div class="field-note">Укажите школу, колледж или вуз</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Дополнительные поля для родителей -->
+                            <div class="child-phone-fields" id="parentFields">
+                                <h3 style="margin-bottom: 20px; color: #121315;">Данные ребенка</h3>
+                                <p style="margin-bottom: 20px; color: #666;">Для привязки аккаунта к ребенку укажите его номер телефона</p>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="childPhone" class="required">Телефон ребенка</label>
+                                        <input type="tel" id="childPhone" name="childPhone" class="form-control" placeholder="+7 (999) 987-65-43">
+                                        <div class="error-message" id="childPhoneError">Пожалуйста, введите номер телефона ребенка</div>
+                                        <div class="field-note">Номер должен быть зарегистрирован в системе Финатлон</div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="childName">Имя ребенка</label>
+                                        <input type="text" id="childName" name="childName" class="form-control" placeholder="Иванов Петр Иванович">
+                                        <div class="field-note">Укажите, если известно</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-navigation">
+                                <button type="button" class="btn btn-secondary" id="prevStep2">Назад</button>
+                                <button type="button" class="btn" id="nextStep2">Продолжить</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Шаг 3: Завершение -->
+                        <div class="form-step" id="step3Form">
+                            <h2 class="section-title">Проверка данных</h2>
+                            <p style="text-align: center; margin-bottom: 40px; color: #666;">Проверьте введенные данные перед отправкой</p>
+                            
+                            <div style="background-color: #f8f9fa; padding: 30px; border-radius: 8px; margin-bottom: 30px;">
+                                <div id="reviewData">
+                                    <!-- Данные будут заполнены JavaScript -->
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label style="display: flex; align-items: flex-start; cursor: pointer;">
+                                    <input type="checkbox" id="agreeTerms" name="agreeTerms" style="margin-right: 10px; margin-top: 3px;">
+                                    <span>Я согласен с <a href="#" style="color: #ff5d00;">условиями использования</a> и <a href="#" style="color: #ff5d00;">политикой конфиденциальности</a> платформы Финатлон</span>
+                                </label>
+                                <div class="error-message" id="termsError">Необходимо согласиться с условиями</div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label style="display: flex; align-items: flex-start; cursor: pointer;">
+                                    <input type="checkbox" id="newsletter" name="newsletter" style="margin-right: 10px; margin-top: 3px;" checked>
+                                    <span>Я хочу получать уведомления о новых мероприятиях и акциях на email</span>
+                                </label>
+                            </div>
+                            
+                            <div class="form-navigation">
+                                <button type="button" class="btn btn-secondary" id="prevStep3">Назад</button>
+                                <button type="submit" class="btn" id="submitForm">Зарегистрироваться</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Подвал -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column footer-logo">
+                    <div class="brand">Ф<span>инатлон</span></div>
+                    <p>Платформа для организации и участия в мероприятиях, олимпиадах, форсайтах и хакатонах.</p>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Контакты</h3>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>info@finatlon.ru</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+7 (800) 123-45-67</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Поддержка</h3>
+                    <ul>
+                        <li><a href="#">Частые вопросы</a></li>
+                        <li><a href="#">Техническая помощь</a></li>
+                        <li><a href="#">Служба поддержки</a></li>
+                        <li><a href="#">Обратная связь</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Документы</h3>
+                    <ul>
+                        <li><a href="#">Пользовательское соглашение</a></li>
+                        <li><a href="#">Политика конфиденциальности</a></li>
+                        <li><a href="#">Правила участия</a></li>
+                        <li><a href="#">Документация API</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 Финатлон. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
