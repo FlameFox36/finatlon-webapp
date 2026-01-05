@@ -5,7 +5,7 @@ import './App.css'
 import Header from './components/Header';
 import Footer from './components/Footer';
 import RegistrationForm from './components/RegistrationForm';
-import './styles.css';
+import './pages/registration/styles.css';
 
 function App() {
   return (
