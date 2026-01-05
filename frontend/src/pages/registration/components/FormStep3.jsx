@@ -111,7 +111,7 @@ function FormStep3({
             id="newsletter"
             name="newsletter"
             style={{ marginRight: '10px', marginTop: '3px' }}
-            checked={formData.newsletter || true}
+            checked={formData.newsletter !== false}
             onChange={(e) => onFormDataChange({ newsletter: e.target.checked })}
           />
           <span>Я хочу получать уведомления о новых мероприятиях и акциях на email</span>
