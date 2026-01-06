@@ -4,7 +4,7 @@ import FormStep1 from './FormStep1.jsx';
 import FormStep2 from './FormStep2.jsx';
 import FormStep3 from './FormStep3.jsx';
 
-const apiHost = process.env.API_HOST;
+const apiHost = 'localhost';
 
 function RegistrationForm() {
   const [currentStep, setCurrentStep] = useState(1);
