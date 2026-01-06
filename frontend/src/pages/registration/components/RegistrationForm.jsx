@@ -4,6 +4,7 @@ import FormStep1 from './FormStep1.jsx';
 import FormStep2 from './FormStep2.jsx';
 import FormStep3 from './FormStep3.jsx';
 
+
 const apiHost = 'localhost';
 
 function RegistrationForm() {
