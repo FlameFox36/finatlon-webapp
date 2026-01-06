@@ -4,8 +4,6 @@ import FormStep1 from './FormStep1.jsx';
 import FormStep2 from './FormStep2.jsx';
 import FormStep3 from './FormStep3.jsx';
 
-const apiHost = 'localhost';
-
 function RegistrationForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [userType, setUserType] = useState('');
@@ -106,7 +104,9 @@ function RegistrationForm() {
   };
 
   const sendFormData = (formData) => {
-    fetch(`http://${apiHost}/register`, {
+    const apiUrl = import.meta.env.VITE_API_HOST
+
+    fetch(`http://${apiURL}/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
