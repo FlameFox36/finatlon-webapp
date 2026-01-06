@@ -23,12 +23,12 @@ function ProgressSteps({ currentStep }) {
           <div
             className="progress-fill"
             id="progressFill"
-            style={{ width: `${(currentStep - 1) * 50}%` }}
+            style={{ width: `${(currentStep) * 33}%` }}
           ></div>
         </div>
         <div className="progress-text">
           <span>Шаг {currentStep} из 3</span>
-          <span id="progressPercent">{Math.round((currentStep - 1) * 50)}%</span>
+          <span id="progressPercent">{Math.round((currentStep) * 33.3)}%</span>
         </div>
       </div>
     </>
