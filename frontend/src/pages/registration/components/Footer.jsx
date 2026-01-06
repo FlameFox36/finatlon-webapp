@@ -46,7 +46,7 @@ function Footer() {
         </div>
         
         <div className="copyright">
-          <p>&copy; 2023 Финатлон. Все права защищены.</p>
+          <p>&copy; 2026 Финатлон. Все права защищены Бэтменом.</p>
         </div>
       </div>
     </footer>
