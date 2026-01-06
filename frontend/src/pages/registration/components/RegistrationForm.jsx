@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import ProgressSteps from './ProgressSteps';
-import FormStep1 from './FormStep1';
-import FormStep2 from './FormStep2';
-import FormStep3 from './FormStep3';
+import ProgressSteps from './ProgressSteps.jsx';
+import FormStep1 from './FormStep1.jsx';
+import FormStep2 from './FormStep2.jsx';
+import FormStep3 from './FormStep3.jsx';
 
 function RegistrationForm() {
   const [currentStep, setCurrentStep] = useState(1);

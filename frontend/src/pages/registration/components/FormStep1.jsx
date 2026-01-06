@@ -1,5 +1,5 @@
 import React from 'react';
-import UserTypeSelector from './UserTypeSelector';
+import UserTypeSelector from './UserTypeSelector.jsx';
 
 function FormStep1({ userType, onSelectUserType, onNextStep }) {
   const handleNext = () => {
