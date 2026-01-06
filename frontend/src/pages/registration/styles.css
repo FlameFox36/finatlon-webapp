@@ -234,11 +234,6 @@ header {
     font-weight: 600;
 }
 
-/* Формы */
-.form-step {
-    display: none;
-}
-
 .form-step.active {
     display: block;
     animation: fadeIn 0.5s ease;
