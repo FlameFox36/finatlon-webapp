@@ -4,6 +4,7 @@ function FormStep3({
   formData,
   userType,
   onPrevStep,
+  onFormDataChange,
   onSubmit,
   errors,
   setErrors
@@ -14,10 +15,6 @@ function FormStep3({
     'student': 'Студент',
     'parent': 'Родитель',
     'teacher': 'Учитель'
-  };
-
-  const onFormDataChange = () => {
-    console.log('onFormDataChange raised');
   };
 
   const formatDate = (dateString) => {

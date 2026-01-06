@@ -4,6 +4,8 @@ import FormStep1 from './FormStep1.jsx';
 import FormStep2 from './FormStep2.jsx';
 import FormStep3 from './FormStep3.jsx';
 
+const apiHost = process.env.API_HOST;
+
 function RegistrationForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [userType, setUserType] = useState('');
@@ -83,9 +85,7 @@ function RegistrationForm() {
   const handleSubmit = () => {
     // Здесь обычно отправка данных на сервер
     console.log('Отправка данных:', { userType, ...formData });
-    
-    // Имитация успешной отправки
-    alert('Регистрация успешно завершена! На ваш email отправлено письмо с подтверждением.');
+    sendFormData({ userType, ...formData })
     
     // Сброс формы
     setUserType('');
@@ -103,6 +103,28 @@ function RegistrationForm() {
     });
     setErrors({});
     setCurrentStep(1);
+  };
+
+  const sendFormData = (formData) => {
+    fetch(`http://${apiHost}/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Ошибка сети: ' + response.statusText);
+      }
+      return response.json();
+    })
+    .then(result => {
+      console.log('Ответ сервера:', result);
+    })
+    .catch(error => {
+      console.error('Ошибка при отправке данных:', error);
+    });
   };
 
   return (
