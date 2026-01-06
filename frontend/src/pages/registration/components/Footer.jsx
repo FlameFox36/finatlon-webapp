@@ -6,7 +6,7 @@ function Footer() {
       <div className="container">
         <div className="footer-container">
           <div className="footer-column footer-logo">
-            <div className="brand">Ф<span>инатлон</span></div>
+            <div className="brand"><span>Финатлон</span></div>
             <p>Платформа для организации и участия в мероприятиях, олимпиадах, форсайтах и хакатонах.</p>
           </div>
           
