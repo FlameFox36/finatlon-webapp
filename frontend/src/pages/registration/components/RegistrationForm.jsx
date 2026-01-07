@@ -104,9 +104,7 @@ function RegistrationForm() {
   };
 
   const sendFormData = (formData) => {
-    const apiUrl = import.meta.env.VITE_API_HOST
-
-    fetch(`http://${apiURL}/register`, {
+    fetch(`http://localhost/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
