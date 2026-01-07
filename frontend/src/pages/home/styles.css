@@ -6,11 +6,32 @@
     font-family: 'Inter', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
 }
 
+/* Дополнительные глобальные исправления */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+* {
+    max-width: 100%; /* Ограничиваем максимальную ширину всех элементов */
+}
+
+img, svg, video {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Исправление для таблиц и других широких элементов */
+table, iframe, embed, object {
+    max-width: 100%;
+}
+
 body {
     background-color: #ffffff;
     color: #333;
     line-height: 1.6;
     font-weight: 400;
+    overflow-x: hidden;
 }
 
 a {
@@ -25,9 +46,9 @@ ul {
 
 .container {
     width: 100%;
-    max-width: 1200px;
+    max-width: 100%;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 clamp(20px, 4vw, 40px);
 }
 
 .btn {
@@ -49,7 +70,7 @@ ul {
 }
 
 .section-title {
-    font-size: 32px;
+    font-size: clamp(28px, 3.5vw, 32px);
     margin-bottom: 40px;
     text-align: center;
     color: #121315;
@@ -77,12 +98,17 @@ header {
     top: 0;
     z-index: 1000;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
 }
 
 .header-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 40px);
 }
 
 .logo {
@@ -90,6 +116,7 @@ header {
     align-items: center;
     font-size: 24px;
     font-weight: bold;
+    flex-shrink: 0;
 }
 
 .logo img {
@@ -107,7 +134,9 @@ header {
 
 .nav-links {
     display: flex;
-    gap: 30px;
+    gap: clamp(20px, 2.5vw, 30px);
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .nav-item {
@@ -120,8 +149,9 @@ header {
     padding: 8px 0;
     display: flex;
     align-items: center;
-    font-size: 17px;
+    font-size: clamp(15px, 1.1vw, 17px);
     gap: 8px;
+    white-space: nowrap;
 }
 
 .nav-link:hover {
@@ -170,6 +200,7 @@ header {
     display: flex;
     align-items: center;
     gap: 15px;
+    flex-shrink: 0;
 }
 
 .user-btn {
@@ -180,6 +211,7 @@ header {
     display: flex;
     align-items: center;
     gap: 8px;
+    white-space: nowrap;
 }
 
 .user-btn:hover {
@@ -188,27 +220,32 @@ header {
 }
 
 .mobile-menu-btn {
-    /* display: none; */
+    display: none;
     font-size: 24px;
     cursor: pointer;
+    color: white;
+    background: none;
+    border: none;
 }
 
 /* Основной контент */
 .hero {
     background-color: #121315;
     color: white;
-    padding: 80px 0;
+    padding: clamp(50px, 8vw, 80px) 0;
     text-align: center;
-    margin-bottom: 80px;
+    margin-bottom: clamp(50px, 8vw, 80px);
+    width: 100%;
 }
 
 .hero-content {
-    max-width: 800px;
+    max-width: min(1200px, 90vw);
     margin: 0 auto;
+    padding: 0 20px;
 }
 
 .hero h1 {
-    font-size: 42px;
+    font-size: clamp(32px, 5vw, 48px);
     margin-bottom: 20px;
     line-height: 1.2;
 }
@@ -218,29 +255,34 @@ header {
 }
 
 .hero p {
-    font-size: 18px;
+    font-size: clamp(16px, 2vw, 18px);
     margin-bottom: 30px;
     color: #ccc;
-    max-width: 600px;
+    max-width: min(600px, 80vw);
     margin-left: auto;
     margin-right: auto;
 }
 
 .hero .btn {
-    font-size: 18px;
-    padding: 15px 40px;
+    font-size: clamp(16px, 1.5vw, 18px);
+    padding: clamp(12px, 2vw, 15px) clamp(30px, 4vw, 40px);
 }
 
 /* Секция с блоками */
 .features {
-    padding: 80px 0;
+    padding: clamp(50px, 8vw, 80px) 0;
     background-color: #f8f9fa;
+    width: 100%;
 }
 
 .features-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: clamp(20px, 3vw, 30px);
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 clamp(15px, 3vw, 30px);
 }
 
 .feature-card {
@@ -249,6 +291,7 @@ header {
     overflow: hidden;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
 }
 
 .feature-card:hover {
@@ -260,6 +303,7 @@ header {
     height: 180px;
     background-size: cover;
     background-position: center;
+    width: 100%;
 }
 
 .feature-1 {
@@ -275,11 +319,11 @@ header {
 }
 
 .feature-content {
-    padding: 30px;
+    padding: clamp(20px, 3vw, 30px);
 }
 
 .feature-content h3 {
-    font-size: 22px;
+    font-size: clamp(20px, 2vw, 22px);
     margin-bottom: 15px;
     color: #121315;
 }
@@ -287,6 +331,7 @@ header {
 .feature-content p {
     color: #666;
     margin-bottom: 20px;
+    font-size: clamp(14px, 1.5vw, 16px);
 }
 
 .feature-link {
@@ -307,8 +352,16 @@ header {
 
 /* Бегущая строка */
 .marquee-section {
-    padding: 60px 0;
+    padding: clamp(40px, 6vw, 60px) 0;
     background-color: white;
+    width: 100%;
+    overflow: hidden;
+}
+
+.marquee-wrapper {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
 }
 
 .marquee-container {
@@ -345,7 +398,7 @@ header {
 
 .marquee img {
     height: 60px;
-    margin: 0 30px;
+    margin: 0 clamp(20px, 3vw, 30px);
     filter: grayscale(100%);
     opacity: 0.7;
     transition: all 0.3s ease;
@@ -367,23 +420,29 @@ header {
 
 /* Вакансии */
 .vacancies {
-    padding: 80px 0;
+    padding: clamp(50px, 8vw, 80px) 0;
     background-color: #f8f9fa;
+    width: 100%;
 }
 
 .vacancies-container {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: clamp(20px, 3vw, 30px);
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 clamp(15px, 3vw, 30px);
 }
 
 .vacancy-card {
     background-color: white;
     border-radius: 8px;
-    padding: 30px;
+    padding: clamp(20px, 3vw, 30px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     border-left: 4px solid #ff5d00;
     transition: transform 0.3s ease;
+    width: 100%;
 }
 
 .vacancy-card:hover {
@@ -395,12 +454,16 @@ header {
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .vacancy-title {
-    font-size: 22px;
+    font-size: clamp(18px, 2vw, 22px);
     color: #121315;
     margin-bottom: 5px;
+    flex: 1;
+    min-width: 200px;
 }
 
 .vacancy-tag {
@@ -410,16 +473,19 @@ header {
     border-radius: 20px;
     font-size: 14px;
     font-weight: 600;
+    white-space: nowrap;
 }
 
 .vacancy-description {
     color: #666;
     margin-bottom: 25px;
+    font-size: clamp(14px, 1.5vw, 16px);
 }
 
 .vacancy-details {
     display: flex;
-    gap: 20px;
+    flex-wrap: wrap;
+    gap: clamp(10px, 2vw, 20px);
     margin-bottom: 20px;
 }
 
@@ -428,34 +494,51 @@ header {
     align-items: center;
     gap: 8px;
     color: #777;
+    font-size: clamp(13px, 1.5vw, 14px);
 }
-
-/* Подвал */
+/* Подвал - ИСПРАВЛЕННЫЙ ВАРИАНТ */
 footer {
     background-color: #121315;
     color: #ddd;
-    padding: 60px 0 30px;
+    padding: clamp(40px, 6vw, 60px) 0 30px;
+    width: 100%;
+    overflow-x: hidden; /* Добавляем чтобы избежать горизонтального скролла */
+}
+
+.footer-inner {
+    max-width: min(1400px, 95vw);
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 40px);
 }
 
 .footer-container {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 40px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: clamp(20px, 3vw, 40px);
     margin-bottom: 40px;
+    width: 100%;
+}
+
+.footer-column {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden; /* Предотвращаем выпадание контента */
 }
 
 .footer-column h3 {
     color: white;
-    font-size: 18px;
+    font-size: clamp(16px, 1.5vw, 18px);
     margin-bottom: 20px;
     position: relative;
     padding-bottom: 10px;
+    width: 100%;
+    word-wrap: break-word;
 }
 
 .footer-column h3:after {
     content: '';
     position: absolute;
-    width: 40px;
+    width: min(40px, 100%);
     height: 3px;
     background-color: #ff5d00;
     bottom: 0;
@@ -466,26 +549,42 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    max-width: 100%;
 }
 
 .footer-logo img {
     height: 40px;
     margin-bottom: 15px;
+    max-width: 100%;
 }
 
 .footer-logo .brand {
-    font-size: 24px;
+    font-size: clamp(20px, 2vw, 24px);
     font-weight: bold;
     color: white;
     margin-bottom: 10px;
+    word-wrap: break-word;
 }
 
 .footer-logo .brand span {
     color: #ff5d00;
 }
 
+.footer-column ul {
+    width: 100%;
+    max-width: 100%;
+}
+
 .footer-column ul li {
     margin-bottom: 12px;
+    width: 100%;
+}
+
+.footer-column ul li a {
+    display: inline-block;
+    max-width: 100%;
+    word-wrap: break-word;
+    white-space: normal; /* Разрешаем перенос текста */
 }
 
 .footer-column ul li a:hover {
@@ -496,16 +595,21 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    width: 100%;
 }
 
 .contact-item {
     display: flex;
-    align-items: center;
+    align-items: flex-start; /* Изменено с center на flex-start для текста */
     gap: 10px;
+    font-size: clamp(14px, 1.5vw, 15px);
+    width: 100%;
+    max-width: 100%;
 }
 
 .social-links {
     display: flex;
+    flex-wrap: wrap; /* Разрешаем перенос на новую строку */
     gap: 15px;
     margin-top: 15px;
 }
@@ -519,6 +623,7 @@ footer {
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
+    flex-shrink: 0; /* Запрещаем сжатие */
 }
 
 .social-link:hover {
@@ -528,16 +633,20 @@ footer {
 
 .newsletter-form {
     margin-top: 15px;
+    width: 100%;
 }
 
 .newsletter-form input {
     width: 100%;
+    max-width: 100%;
     padding: 12px 15px;
     border-radius: 4px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     background-color: rgba(255, 255, 255, 0.05);
     color: white;
     margin-bottom: 10px;
+    font-size: 14px;
+    box-sizing: border-box; /* Важно для правильного расчета ширины */
 }
 
 .newsletter-form input:focus {
@@ -549,6 +658,7 @@ footer {
     width: 100%;
     padding: 12px;
     font-size: 14px;
+    box-sizing: border-box;
 }
 
 .copyright {
@@ -556,53 +666,68 @@ footer {
     padding-top: 30px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     color: #aaa;
-    font-size: 14px;
+    font-size: clamp(13px, 1.5vw, 14px);
+    width: 100%;
+    max-width: 100%;
+    word-wrap: break-word;
 }
 
-/* Адаптивность */
-@media (max-width: 992px) {
-    .features-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .vacancies-container {
-        grid-template-columns: 1fr;
-    }
-    
-    .footer-container {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 30px;
-    }
-}
-
+/* Специальные исправления для очень маленьких экранов */
 @media (max-width: 768px) {
-    .nav-links {
-        display: flex;
-    }
-    
-    .mobile-menu-btn {
-        display: block;
-    }
-    
-    .features-container {
-        grid-template-columns: 1fr;
+    .footer-inner {
+        padding: 0 15px;
+        max-width: 100%;
     }
     
     .footer-container {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 20px;
     }
     
-    .hero h1 {
-        font-size: 32px;
+    .contact-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
     }
 }
 
 @media (max-width: 576px) {
+    .footer-inner {
+        padding: 0 10px;
+    }
+    
     .footer-container {
         grid-template-columns: 1fr;
     }
     
-    .section-title {
-        font-size: 28px;
+    .social-links {
+        justify-content: center;
+    }
+    
+    .newsletter-form input,
+    .newsletter-form .btn {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 400px) {
+    .footer-logo .brand {
+        font-size: 18px;
+    }
+    
+    .footer-column h3 {
+        font-size: 16px;
+    }
+    
+    .footer-column ul li a {
+        font-size: 14px;
+    }
+}
+
+/* Для очень больших экранов - ограничиваем ширину */
+@media (min-width: 1400px) {
+    .footer-inner {
+        max-width: 1400px;
+        padding: 0 40px;
     }
 }
