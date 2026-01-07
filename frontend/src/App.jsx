@@ -12,16 +12,14 @@ import './pages/home/styles.css';
 
 function App() {
   return (
-    <>
-      <Header />
       <BrowserRouter>
+      <Header />
         <Routes>
           <Route path="" element={<Homepage />}/>
           <Route path="registration" element={<RegistrationForm />}/>
         </Routes>
-      </BrowserRouter>
       <Footer />
-    </>
+      </BrowserRouter>
   );
 }
 

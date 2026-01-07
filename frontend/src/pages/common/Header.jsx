@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
-import { FaNewspaper, FaComments, FaCalendarAlt, FaBullhorn, FaInfoCircle, FaUser, FaBars } from 'react-icons/fa';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FaNewspaper, FaComments, FaCalendarAlt, FaBullhorn, FaInfoCircle, FaUser} from 'react-icons/fa';
 
 function Header() {
+  const navigate = useNavigate();
+  const onRefHomepage = () => navigate("/");
+
   const navItems = [
     {
       name: " Лента",
@@ -55,10 +59,9 @@ function Header() {
     <header>
       <div className="container header-container">
         <div className="logo">
-          <a href="#">
-            <img src="https://via.placeholder.com/40/ff5d00/ffffff?text=F" alt="Логотип" />
-            <span>Финатлон</span>
-          </a>
+          <button type="button" className="" onClick={onRefHomepage}>
+            Логотип&nbsp;Ф<span>инатлон</span>
+          </button>
         </div>
 
         <nav className="nav-links">
