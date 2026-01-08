@@ -12,7 +12,7 @@ import './pages/home/styles.css';
 
 function App() {
   return (
-      <BrowserRouter>
+      <BrowserRouter className='App'>
       <Header />
         <Routes>
           <Route path="" element={<Homepage />}/>

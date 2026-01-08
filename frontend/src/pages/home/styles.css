@@ -8,12 +8,8 @@
 
 /* Дополнительные глобальные исправления */
 html, body {
-    max-width: 100%;
+    width: 100%;
     overflow-x: hidden;
-}
-
-* {
-    max-width: 100%; /* Ограничиваем максимальную ширину всех элементов */
 }
 
 img, svg, video {
@@ -46,7 +42,6 @@ ul {
 
 .container {
     width: 100%;
-    max-width: 100%;
     margin: 0 auto;
     padding: 0 clamp(20px, 4vw, 40px);
 }
@@ -106,7 +101,7 @@ header {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    max-width: 1400px;
+    /* max-width: 1400px; */
     margin: 0 auto;
     padding: 0 clamp(20px, 4vw, 40px);
 }
@@ -280,7 +275,7 @@ header {
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: clamp(20px, 3vw, 30px);
     width: 100%;
-    max-width: 1400px;
+    /* max-width: 1400px; */
     margin: 0 auto;
     padding: 0 clamp(15px, 3vw, 30px);
 }
@@ -430,7 +425,7 @@ header {
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: clamp(20px, 3vw, 30px);
     width: 100%;
-    max-width: 1400px;
+    /* max-width: 1400px; */
     margin: 0 auto;
     padding: 0 clamp(15px, 3vw, 30px);
 }
@@ -521,7 +516,6 @@ footer {
 
 .footer-column {
     width: 100%;
-    max-width: 100%;
     overflow: hidden; /* Предотвращаем выпадание контента */
 }
 
@@ -549,13 +543,11 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    max-width: 100%;
 }
 
 .footer-logo img {
     height: 40px;
     margin-bottom: 15px;
-    max-width: 100%;
 }
 
 .footer-logo .brand {
@@ -572,7 +564,6 @@ footer {
 
 .footer-column ul {
     width: 100%;
-    max-width: 100%;
 }
 
 .footer-column ul li {
@@ -582,7 +573,6 @@ footer {
 
 .footer-column ul li a {
     display: inline-block;
-    max-width: 100%;
     word-wrap: break-word;
     white-space: normal; /* Разрешаем перенос текста */
 }
@@ -595,7 +585,6 @@ footer {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    width: 100%;
 }
 
 .contact-item {
@@ -604,7 +593,6 @@ footer {
     gap: 10px;
     font-size: clamp(14px, 1.5vw, 15px);
     width: 100%;
-    max-width: 100%;
 }
 
 .social-links {
@@ -638,7 +626,6 @@ footer {
 
 .newsletter-form input {
     width: 100%;
-    max-width: 100%;
     padding: 12px 15px;
     border-radius: 4px;
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -668,7 +655,6 @@ footer {
     color: #aaa;
     font-size: clamp(13px, 1.5vw, 14px);
     width: 100%;
-    max-width: 100%;
     word-wrap: break-word;
 }
 
@@ -676,7 +662,6 @@ footer {
 @media (max-width: 768px) {
     .footer-inner {
         padding: 0 15px;
-        max-width: 100%;
     }
     
     .footer-container {
