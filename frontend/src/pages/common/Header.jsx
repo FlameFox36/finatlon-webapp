@@ -87,7 +87,7 @@ function Header() {
         </nav>
 
         <div className="user-menu">
-          <a href="#" className="user-btn">
+          <a href="/profile" className="user-btn">
             <FaUser />
             Личный кабинет
           </a>
