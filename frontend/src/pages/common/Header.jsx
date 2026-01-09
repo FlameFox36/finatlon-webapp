@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaNewspaper, FaComments, FaCalendarAlt, FaBullhorn, FaInfoCircle, FaUser} from 'react-icons/fa';
 
@@ -87,7 +87,7 @@ function Header() {
         </nav>
 
         <div className="user-menu">
-          <a href="#" className="user-btn">
+          <a href="/profile" className="user-btn">
             <FaUser />
             Личный кабинет
           </a>

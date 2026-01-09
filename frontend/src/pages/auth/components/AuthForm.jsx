@@ -7,18 +7,34 @@ const AuthForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true); 
-    
-    console.log('Авторизация:', { email, password, rememberMe });
-    
-    setTimeout(() => {
-      setIsLoading(false);
-      alert('Вход выполнен успешно!');
-    }, 1000);
+    setError('');
+    setIsLoading(true);
+
+    try {
+      // Отправляем запрос на сервер
+      const response = await api.post('/auth/login', {
+        email: email,
+        password: password
+      });
+
+      // Сохраняем токен и данные пользователя
+      authService.login(response.data.token, response.data.user);
+      
+      // Перенаправляем на главную страницу
+      window.location.href = '/';
+      
+    } catch (err) {
+      setError(err.response?.data?.message || 'Ошибка входа');
+    } finally {
+      setLoading(false);
+    }
+
+    navigate(-1); // Перенаправляет на предыдущую страницу
   };
 
   const handleSocialAuth = (provider) => {
@@ -86,6 +102,8 @@ const AuthForm = () => {
             Забыли пароль?
           </a>
         </div>
+
+        {error && <div style={{ color: 'red' }}>{error}</div>}
 
         <button 
           type="submit" 
