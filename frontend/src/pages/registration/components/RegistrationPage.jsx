@@ -228,7 +228,28 @@ function RegistrationForm() {
     });
     setErrors({});
     setCurrentStep(1);
-    setRegistrationSuccess(false);
+  };
+
+  const sendFormData = (formData) => {
+    fetch(`http://localhost/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Ошибка сети: ' + response.statusText);
+      }
+      return response.json();
+    })
+    .then(result => {
+      console.log('Ответ сервера:', result);
+    })
+    .catch(error => {
+      console.error('Ошибка при отправке данных:', error);
+    });
   };
 
   return (

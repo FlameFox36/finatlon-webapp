@@ -4,8 +4,6 @@ import Features from './Features.jsx';
 import Partners from './Partners.jsx';
 import Vacancies from './Vacancies.jsx';
 
-
-
 function Homepage() {
   useEffect(() => {
     // Анимация при загрузке

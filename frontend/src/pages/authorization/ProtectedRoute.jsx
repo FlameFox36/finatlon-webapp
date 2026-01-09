@@ -4,7 +4,7 @@ import authService from '../../auth/AuthService.js';
 
 function ProtectedRoute({ children }) {
   if (!authService.isAuthenticated()) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/auth" />;
   }
   else {
     return children;
