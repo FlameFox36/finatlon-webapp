@@ -10,7 +10,7 @@ public sealed class RegisterUserHandler(IUserRepository users, IUserCredentialsR
     private readonly IUserCredentialsRepository _credentials = credentials;
     private readonly IPasswordHasher _passwordHasher = passwordHasher;
 
-    public async Task<Guid> Handle(RegisterUserCommand command)
+    public async Task<RegisterUserResult> Handle(RegisterUserCommand command)
     {
         var userType = Enum.Parse<UserType>(command.UserType);
 
@@ -36,6 +36,6 @@ public sealed class RegisterUserHandler(IUserRepository users, IUserCredentialsR
         await _users.Save(user);
         await _credentials.Save(credentials);
 
-        return user.Id;
+        return new RegisterUserResult(user.Id);
     }
 }

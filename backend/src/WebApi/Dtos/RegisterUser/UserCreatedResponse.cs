@@ -1,6 +1,6 @@
 namespace WebApi.Dtos;
 
-public sealed class UserCreatedResponse
+public sealed class RegisterUserResponse
 {
     public required Guid UserId { get; init; }
 }
