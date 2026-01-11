@@ -2,39 +2,39 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faVk, faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { useNavigate } from 'react-router-dom';
 
-const AuthForm = () => {
+const AuthForm = ({ login }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
+  // ВРЕМЕНАЯ ЗАГЛУШКА ПОКА НЕТ РЕАЛЬНОГО API
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
 
     try {
-      // Отправляем запрос на сервер
-      const response = await api.post('/auth/login', {
-        email: email,
-        password: password
-      });
-
-      // Сохраняем токен и данные пользователя
-      authService.login(response.data.token, response.data.user);
+      if (email === 'fire.stalker.336@gmail.com' && password === '1') {
+        // Вызываем функцию login из props (которая устанавливает isAuthenticated)
+        if (login) {
+          login(); 
+        }
       
-      // Перенаправляем на главную страницу
-      window.location.href = '/';
+        navigate('/profile');
+      } else {
+        setError('Неверный email или пароль');
+      }
       
     } catch (err) {
       setError(err.response?.data?.message || 'Ошибка входа');
     } finally {
-      setLoading(false);
+      setIsLoading(false); // Исправлено: setIsLoading вместо setLoading
     }
-
-    navigate(-1); // Перенаправляет на предыдущую страницу
   };
 
   const handleSocialAuth = (provider) => {

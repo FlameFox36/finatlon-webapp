@@ -137,38 +137,36 @@ const UserProfileManager = () => {
   };
 
   return (
-    <ProtectedRoute>
-      <div className="profile-isolation-wrapper">
-        <main>
-          <div className="profile-container">
-            {/* Заголовок профиля */}
-            <ProfileHeader 
-              title={profileTitle.title}
-              subtitle={profileTitle.subtitle}
-            />
-            
-            {/* Карточка профиля */}
-            <ProfileCard 
-              ref={profileCardRef}
-              userData={userData}
-              onEdit={handleEditProfile}
-              onExport={handleExportData}
-              onSave={handleSaveProfile}
-              onCancel={handleCancelEdit}
-              onUpdate={updateUserData}
-              isEditing={userData.isEditing}
-            />
-            
-            {/* Статистика */}
-            <ProfileStats 
-              ref={profileStatsRef}
-              stats={stats}
-              onUpdateStat={updateStatValue}
-            />
-          </div>
-        </main>
-      </div>
-    </ProtectedRoute>
+    <div className="profile-isolation-wrapper">
+      <main>
+        <div className="profile-container">
+          {/* Заголовок профиля */}
+          <ProfileHeader 
+            title={profileTitle.title}
+            subtitle={profileTitle.subtitle}
+          />
+          
+          {/* Карточка профиля */}
+          <ProfileCard 
+            ref={profileCardRef}
+            userData={userData}
+            onEdit={handleEditProfile}
+            onExport={handleExportData}
+            onSave={handleSaveProfile}
+            onCancel={handleCancelEdit}
+            onUpdate={updateUserData}
+            isEditing={userData.isEditing}
+          />
+          
+          {/* Статистика */}
+          <ProfileStats 
+            ref={profileStatsRef}
+            stats={stats}
+            onUpdateStat={updateStatValue}
+          />
+        </div>
+      </main>
+    </div>
   );
 };
 

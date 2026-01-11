@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FaNewspaper, FaComments, FaCalendarAlt, FaBullhorn, FaInfoCircle, FaUser} from 'react-icons/fa';
+import { useNavigate, Link } from 'react-router-dom'; // Добавил Link
+import { FaNewspaper, FaComments, FaCalendarAlt, FaBullhorn, FaInfoCircle, FaUser, FaSignOutAlt, FaSignInAlt } from 'react-icons/fa';
 
-function Header() {
+function Header({ isAuthenticated, logout }) { // Добавляем пропсы
   const navigate = useNavigate();
+  
   const onRefHomepage = () => navigate("/");
+  const handleLogout = () => {
+    if (logout) {
+      logout();
+    }
+    navigate("/"); // Перенаправляем на главную после выхода
+  };
 
   const navItems = [
     {
@@ -87,10 +94,30 @@ function Header() {
         </nav>
 
         <div className="user-menu">
-          <a href="/profile" className="user-btn">
-            <FaUser />
-            Личный кабинет
-          </a>
+          {isAuthenticated ? (
+            // Показываем для авторизованного пользователя
+            <>
+              <Link to="/profile" className="user-btn">
+                <FaUser />
+                Личный кабинет
+              </Link>
+              <button onClick={handleLogout} className="user-btn logout-btn">
+                <FaSignOutAlt />
+                Выйти
+              </button>
+            </>
+          ) : (
+            // Показываем для неавторизованного пользователя
+            <>
+              <Link to="/login" className="user-btn">
+                <FaSignInAlt />
+                Войти
+              </Link>
+              <Link to="/registration" className="user-btn register-btn">
+                Регистрация
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>

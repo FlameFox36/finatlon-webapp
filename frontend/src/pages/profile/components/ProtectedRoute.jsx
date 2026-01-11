@@ -1,14 +1,9 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
-import authService from '../../../auth/AuthService.js';
+// ProtectedRoute.jsx - версия с children
+import React from 'react'
+import { Navigate } from 'react-router-dom'
 
-function ProtectedRoute({ children }) {
-  if (!authService.isAuthenticated()) {
-    return <Navigate to="/auth" />;
-  }
-  else {
-    return children;
-  }
+const ProtectedRoute = ({ isAuthenticated, children }) => {
+  return isAuthenticated ? children : <Navigate to="/login" />
 }
 
 export default ProtectedRoute;

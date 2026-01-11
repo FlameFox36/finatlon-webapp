@@ -1,12 +1,12 @@
 import React from 'react';
-import AuthForm from './AuthForm.jsx';
+import AuthForm from './LoginForm.jsx';
 
-const AuthPage = () => {
+const AuthPage = ({ login }) => {
   return (
     <div className="main-content">
       <div className="auth-container">
         <div className="auth-card">
-          <AuthForm />
+          <AuthForm login={login}/>
         </div>
       </div>
     </div>
