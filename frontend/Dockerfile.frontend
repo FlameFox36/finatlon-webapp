@@ -1,0 +1,15 @@
+# Stage 1: build React app
+FROM node:25.2.0-alpine AS build_react
+WORKDIR /app
+
+COPY . .
+RUN npm install
+RUN npm run build
+
+# Stage 2: serve with nginx
+FROM nginx:alpine AS run_frontend
+
+COPY --from=build_react /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
