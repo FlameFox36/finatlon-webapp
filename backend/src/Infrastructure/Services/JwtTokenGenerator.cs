@@ -4,13 +4,14 @@ using System.Text;
 using Application.Users;
 using Domain.Users;
 using Infrastructure.Auth;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Services;
 
-public sealed class JwtTokenGenerator(JwtOptions options) : IJwtTokenGenerator
+public sealed class JwtTokenGenerator(IOptions<JwtOptions> options) : IJwtTokenGenerator
 {
-    private readonly JwtOptions _options = options;
+    private readonly JwtOptions _options = options.Value;
 
     public string Generate(Guid userId, UserType userType)
     {

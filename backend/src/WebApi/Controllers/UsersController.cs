@@ -9,12 +9,13 @@ public sealed class UsersController(RegisterUserHandler registerUser) : Controll
 {
     private readonly RegisterUserHandler _registerUser = registerUser;
 
-    [HttpPost]
+    [AllowAnonymous]
+    [HttpPost("register")]
     public async Task<IActionResult> Register(
         [FromBody] RegisterUserRequest request
         ){
         var command = new RegisterUserCommand(
-            request.UserType,
+            request.UserType.ToString(),
             request.FullName,
             request.Email,
             request.PhoneNumber,
