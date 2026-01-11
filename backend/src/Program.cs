@@ -11,6 +11,7 @@ builder.Configuration
     .AddEnvironmentVariables();
 
 builder.Services
+    .AddOpenApi()
     .AddJwtAuthentication(builder.Configuration)
     .AddAuthorization()
     .AddScoped<RegisterUserHandler>()
@@ -30,7 +31,11 @@ builder.Services.Configure<JwtOptions>(
 );
 
 // After building
-
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi("/openapi");
+}
 
 app.Run();

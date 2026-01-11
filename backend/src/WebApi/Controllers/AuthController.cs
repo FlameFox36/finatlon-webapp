@@ -6,14 +6,9 @@ namespace WebApi.Controllers;
 
 [ApiController]
 [Route("api/auth")]
-public sealed class AuthController : ControllerBase
+public sealed class AuthController(LoginUserHandler login) : ControllerBase
 {
-    private readonly LoginUserHandler _login;
-
-    public AuthController(LoginUserHandler login)
-    {
-        _login = login;
-    }
+    private readonly LoginUserHandler _login = login;
 
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequest request)
