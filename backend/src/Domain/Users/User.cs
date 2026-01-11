@@ -82,4 +82,10 @@ public sealed class User
             institution
         );
     }
+
+    public void ChangeInstitution(string institution)
+    {
+        if (string.IsNullOrWhiteSpace(institution))
+            throw new DomainException("Invalid institution");
+    }
 }

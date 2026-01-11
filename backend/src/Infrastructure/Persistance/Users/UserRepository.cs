@@ -1,6 +1,9 @@
 using Application.Users;
 using Domain.Users;
 using Domain.ValueObjects;
+using Microsoft.EntityFrameworkCore;
+
+namespace Infrastructure.Users;
 
 public sealed class UserRepository(AppDbContext db) : IUserRepository
 {
@@ -18,6 +21,15 @@ public sealed class UserRepository(AppDbContext db) : IUserRepository
         var entity = await _db.Users.FindAsync(id);
         return entity is null ? null : ToDomain(entity);
     }
+
+    public async Task<User?> GetByEmail(Email email)
+    {
+        var entity = await _db.Users
+            .FirstOrDefaultAsync(u => u.Email == email.Value);
+
+        return entity is null ? null : ToDomain(entity);
+    }
+
 
     private static UserEntity ToEntity(User user) => new()
     {

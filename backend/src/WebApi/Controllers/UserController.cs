@@ -1,4 +1,5 @@
 using Application.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Dtos;
 
@@ -33,5 +34,23 @@ public sealed class UsersController : ControllerBase
             $"api/users/{userId}",
             new UserCreatedResponse { UserId = userId }
         );
+    }
+
+    [Authorize]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(
+        Guid id,
+        UpdateUserProfileCommand request,
+        UpdateUserProfileHandler handler
+    ){
+        await handler.Handle(
+            new UpdateUserProfileCommand(
+                id,
+                request.City,
+                request.Institution
+            )
+        );
+
+        return NoContent();
     }
 }

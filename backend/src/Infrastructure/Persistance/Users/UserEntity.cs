@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
+namespace Infrastructure.Users;
+
 [Table("users")]
 public sealed class UserEntity
 {

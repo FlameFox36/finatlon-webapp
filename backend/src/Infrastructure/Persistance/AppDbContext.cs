@@ -1,11 +1,11 @@
+using Infrastructure.Users;
+using Infrastructure.UsersCredentials;
 using Microsoft.EntityFrameworkCore;
 
-public sealed class AppDbContext : DbContext
+public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
     public DbSet<UserEntity> Users => Set<UserEntity>();
-
-    public AppDbContext(DbContextOptions<AppDbContext> options)
-        : base(options) {}
+    public DbSet<UserCredentialsEntity> UsersCredentials => Set<UserCredentialsEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
