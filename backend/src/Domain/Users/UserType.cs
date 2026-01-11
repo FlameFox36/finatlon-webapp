@@ -1,6 +1,6 @@
 namespace Domain.Users;
 
-internal enum UserType
+public enum UserType
 {
     Student = 1,
     Parent = 2,

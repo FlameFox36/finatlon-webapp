@@ -3,7 +3,7 @@ using Domain.ValueObjects;
 
 namespace Domain.Users;
 
-internal sealed class User
+public sealed class User
 {
     public Guid Id { get; }
     public UserType UserType { get; }
@@ -58,6 +58,28 @@ internal sealed class User
             birthDate,
             city.Trim(),
             institution.Trim()
+        );
+    }
+
+    public static User Restore(
+        Guid id,
+        UserType type,
+        string fullName,
+        Email email,
+        PhoneNumber phone,
+        DateOnly birthDate,
+        string city,
+        string institution)
+    {
+        return new User(
+            id,
+            type,
+            fullName,
+            email,
+            phone,
+            birthDate,
+            city,
+            institution
         );
     }
 }

@@ -2,7 +2,7 @@ using Domain.Exceptions;
 
 namespace Domain.ValueObjects;
 
-internal sealed class Email
+public sealed class Email
 {
     public string Value { get; }
 
