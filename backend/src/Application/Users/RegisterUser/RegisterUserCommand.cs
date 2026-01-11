@@ -7,5 +7,6 @@ public sealed record RegisterUserCommand(
     string PhoneNumber,
     DateOnly BirthDate,
     string City,
-    string Institution
+    string Institution,
+    string Password
 );

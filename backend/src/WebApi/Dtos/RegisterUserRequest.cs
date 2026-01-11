@@ -11,4 +11,5 @@ public sealed class RegisterUserRequest
     public required DateOnly BirthDate { get; init; }
     public required string City { get; init; }
     public required string Institution { get; init; }
+    public required string Password { get; init; }
 }

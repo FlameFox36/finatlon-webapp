@@ -16,8 +16,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration
     .AddEnvironmentVariables();
 
-var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL")
-    ?? throw new InvalidConfigurationException("Environment variable DATABASE_URL is not set");
+// var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL")
+//     ?? throw new InvalidConfigurationException("Environment variable DATABASE_URL is not set");
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
@@ -35,7 +35,10 @@ builder.Services
     .AddScoped<IPasswordHasher, PasswordHasher>()
     .AddScoped<IJwtTokenGenerator, JwtTokenGenerator>()
     .AddScoped<IUserCredentialsRepository, UserCredentialsRepository>()
-    .AddDbContext<AppDbContext>(options => options.UseNpgsql(databaseUrl))
+    // .AddDbContext<AppDbContext>(options => options.UseNpgsql("postgresql://appuser:Your_Strong_Password_123@postgres:5432/appdb"))
+    .AddDbContext<AppDbContext>(options => options.UseNpgsql(
+        "Host=localhost;Port=5432;Database=appdb;Username=appuser;Password=Your_Strong_Password_123;"
+    ))
     .AddControllers(options => {
         options.Filters.Add<ExceptionMappingFilter>();
     });

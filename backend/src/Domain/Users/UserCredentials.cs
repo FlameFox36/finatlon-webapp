@@ -15,11 +15,11 @@ public sealed class UserCredentials
         PasswordHash = passwordHash;
     }
 
-    public static UserCredentials Create(Guid userId, UserType type, string rawPassword)
+    public static UserCredentials Create(Guid userId, UserType type, string passwordHash)
         => new(
             userId,
             type,
-            PasswordHash.FromPlainText(rawPassword)
+            PasswordHash.FromHashed(passwordHash)
         );
 
     public static UserCredentials Restore(

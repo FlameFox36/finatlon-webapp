@@ -21,7 +21,8 @@ public sealed class UsersController(RegisterUserHandler registerUser) : Controll
             request.PhoneNumber,
             request.BirthDate,
             request.City,
-            request.Institution
+            request.Institution,
+            request.Password
         );
 
         var userId = await _registerUser.Handle(command);
