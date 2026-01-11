@@ -1,4 +1,5 @@
 using Application.Users;
+using Domain.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -8,11 +9,13 @@ using WebApi.Dtos;
 [Route("api/users")]
 public sealed class UsersController(
     RegisterUserHandler registerHandler,
-    LoginUserHandler loginHandler
+    LoginUserHandler loginHandler,
+    GetUserByEmailHandler getUserByEmailHandler
 ) : ControllerBase
 {
     private readonly RegisterUserHandler _registerHandler = registerHandler;
     private readonly LoginUserHandler _loginHandler = loginHandler;
+    private readonly GetUserByEmailHandler _getUserByEmailHandler = getUserByEmailHandler;
 
     [AllowAnonymous]
     [HttpPost("register")]
@@ -50,9 +53,27 @@ public sealed class UsersController(
             )
         );
 
-        return Ok(new
-        {
-            accessToken = result.AccessToken
+        return Ok(new LoginResult(result.AccessToken));
+    }
+
+    [Authorize]
+    [HttpGet]
+    public async Task<IActionResult> GetUserByEmailEndpoint(GetUserByEmailRequest request)
+    {
+        var result = await _getUserByEmailHandler.Handle(
+            new GetUserByEmailQuery(
+                request.Email
+            )
+        );
+
+        return Ok(new GetUserByEmailResponse {
+            UserType = Enum.Parse<UserType>(result.UserType),
+            FullName = result.FullName,
+            Email = result.Email,
+            PhoneNumber = result.PhoneNumber,
+            BirthDate = result.BirthDate,
+            City = result.City,
+            Institution = result.Institution
         });
     }
 }

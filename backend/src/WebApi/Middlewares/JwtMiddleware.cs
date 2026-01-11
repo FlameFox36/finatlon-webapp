@@ -22,8 +22,8 @@ public static class JwtAuthenticationExtensions
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = "...",
-                    ValidAudience = "...",
+                    ValidIssuer = jwt!.Issuer,
+                    ValidAudience = jwt!.Audience,
                     IssuerSigningKey = new SymmetricSecurityKey(
                         Encoding.UTF8.GetBytes(jwt!.Secret)
                     )

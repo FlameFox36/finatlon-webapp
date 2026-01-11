@@ -16,13 +16,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration
     .AddEnvironmentVariables();
 
-// var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL")
-//     ?? throw new InvalidConfigurationException("Environment variable DATABASE_URL is not set");
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL")
+    ?? throw new InvalidConfigurationException("Environment variable DATABASE_URL is not set");
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.AddDebug();
 builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
+builder.Logging.AddConfiguration(builder.Configuration.GetSection("Jwt"));
 
 builder.Services
     .AddOpenApi()
@@ -31,16 +32,13 @@ builder.Services
     .AddAuthorization()
     .AddScoped<RegisterUserHandler>()
     .AddScoped<LoginUserHandler>()
+    .AddScoped<GetUserByEmailHandler>()
     .AddScoped<IUserRepository, UserRepository>()
     .AddScoped<IUserCredentialsRepository, UserCredentialsRepository>()
     .AddScoped<IUserContext, HttpUserContext>()
     .AddScoped<IPasswordHasher, PasswordHasher>()
     .AddScoped<IJwtTokenGenerator, JwtTokenGenerator>()
-    .AddScoped<IUserCredentialsRepository, UserCredentialsRepository>()
-    // .AddDbContext<AppDbContext>(options => options.UseNpgsql("postgresql://appuser:Your_Strong_Password_123@postgres:5432/appdb"))
-    .AddDbContext<AppDbContext>(options => options.UseNpgsql(
-        "Host=localhost;Port=5432;Database=appdb;Username=appuser;Password=Your_Strong_Password_123;"
-    ))
+    .AddDbContext<AppDbContext>(options => options.UseNpgsql(databaseUrl))
     .AddControllers(options => {
         options.Filters.Add<ExceptionMappingFilter>();
     });
@@ -57,6 +55,19 @@ builder.Services.AddControllers()
         new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
     ));
 
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy(
+            "AllowAllOrigins",
+            builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+        );
+    });
+}
 
 // After building
 var app = builder.Build();
@@ -65,6 +76,7 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi("/openapi");
     app.UseDeveloperExceptionPage();
+    app.UseCors("AllowAllOrigins");
 }
 
 app.UseRouting();
