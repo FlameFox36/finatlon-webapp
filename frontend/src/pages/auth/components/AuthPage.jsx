@@ -1,6 +1,5 @@
 import React from 'react';
 import AuthForm from './AuthForm.jsx';
-import ProtectedRoute from '../../authorization/ProtectedRoute.jsx';
 
 const AuthPage = () => {
   return (
