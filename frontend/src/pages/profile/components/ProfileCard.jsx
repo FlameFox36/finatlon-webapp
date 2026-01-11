@@ -70,9 +70,6 @@ const ProfileCard = forwardRef((props, ref) => {
           <button className="btn" onClick={handleEditProfile}>
             <i className="fas fa-edit"></i> Редактировать профиль
           </button>
-          <button className="btn btn-secondary" onClick={handleExportData}>
-            <i className="fas fa-download"></i> Экспорт данных
-          </button>
         </div>
       </div>
     </div>

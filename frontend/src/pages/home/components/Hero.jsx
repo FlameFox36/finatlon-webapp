@@ -15,7 +15,7 @@ function Hero() {
           для развития и самореализации.
         </p>
         <button type="button" className="btn btn-secondary" onClick={onRefRegister}>
-          Зарегистрироваться
+          Войти
         </button>
       </div>
     </section>

@@ -163,36 +163,6 @@ const UserProfileManager = () => {
             stats={stats}
             onUpdateStat={updateStatValue}
           />
-          
-          {/* Дополнительные управляющие кнопки */}
-          <div className="profile-extra-actions">
-            <button 
-              className="btn btn-secondary" 
-              onClick={resetProfile}
-            >
-              <i className="fas fa-redo"></i> Сбросить
-            </button>
-            <button 
-              className="btn" 
-              onClick={() => setProfileTitle({
-                title: "Мой профиль",
-                subtitle: "Обновленная информация"
-              })}
-            >
-              <i className="fas fa-paint-brush"></i> Обновить заголовок
-            </button>
-          </div>
-          
-          {/* Панель состояния */}
-          <div className="profile-status">
-            <p>
-              <i className="fas fa-info-circle"></i>
-              {userData.isEditing ? 'Режим редактирования активен' : 'Профиль в режиме просмотра'}
-            </p>
-            <p className="profile-timestamp">
-              Обновлено: {new Date().toLocaleTimeString('ru-RU')}
-            </p>
-          </div>
         </div>
       </main>
     </div>
