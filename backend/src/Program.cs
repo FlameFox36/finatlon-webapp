@@ -26,7 +26,6 @@ builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
 builder.Logging.AddConfiguration(builder.Configuration.GetSection("Jwt"));
 
 builder.Services
-    .AddOpenApi()
     .AddLogging()
     .AddJwtAuthentication(builder.Configuration)
     .AddAuthorization()
@@ -57,7 +56,9 @@ builder.Services.AddControllers()
 
 if (builder.Environment.IsDevelopment())
 {
-    builder.Services.AddCors(options =>
+    builder.Services
+    .AddOpenApi()
+    .AddCors(options =>
     {
         options.AddPolicy(
             "AllowAllOrigins",
@@ -66,7 +67,8 @@ if (builder.Environment.IsDevelopment())
                 .AllowAnyMethod()
                 .AllowAnyHeader()
         );
-    });
+    }
+    );
 }
 
 // After building

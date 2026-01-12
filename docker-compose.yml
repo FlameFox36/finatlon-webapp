@@ -26,29 +26,14 @@ services:
         - type=gha,mode=max
     restart: always
     depends_on:
-      - migrations
+      postgres:
+        condition: service_healthy
     environment:
       DATABASE_URL: Host=postgres;Port=${POSTGRES_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
       ASPNETCORE_ENVIRONMENT: Production
     ports:
-      - "${BACKEND_PORT}:8000"
-
-  migrations:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.migrations
-      cache_from:
-        - type=gha
-      cache_to:
-        - type=gha,mode=max
-    environment:
-      DATABASE_URL: Host=postgres;Port=${POSTGRES_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};
-      ASPNETCORE_ENVIRONMENT: Production
-    depends_on:
-      postgres:
-        condition: service_healthy
-    restart: "no"
+      - "${BACKEND_PORT}:8080"
 
   frontend:
     build:
