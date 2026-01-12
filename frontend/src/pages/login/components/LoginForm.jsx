@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faVk, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { useNavigate } from 'react-router-dom';
+import authService from '../../../auth/AuthService.js'; // Импортируем AuthService
 
 const AuthForm = ({ login }) => {
   const [email, setEmail] = useState('');
@@ -12,28 +13,64 @@ const AuthForm = ({ login }) => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  // ВРЕМЕНАЯ ЗАГЛУШКА ПОКА НЕТ РЕАЛЬНОГО API
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
     setIsLoading(true);
+    setError('');
+
+    // Валидация полей
+    if (!email.trim()) {
+      setError('Пожалуйста, введите email');
+      setIsLoading(false);
+      return;
+    }
+
+    if (!password.trim()) {
+      setError('Пожалуйста, введите пароль');
+      setIsLoading(false);
+      return;
+    }
 
     try {
-      if (email === 'fire.stalker.336@gmail.com' && password === '1') {
-        // Вызываем функцию login из props (которая устанавливает isAuthenticated)
-        if (login) {
-          login(); 
-        }
+      // Используем AuthService для авторизации
+      const credentials = {
+        email: email.trim(),
+        password: password.trim()
+      };
+
+      const result = await authService.login(credentials);
       
+      if (result.success) {
+        // Вызываем callback для обновления состояния в App.js
+        login();
+        
+        // Если установлен флажок "Запомнить меня"
+        if (rememberMe) {
+          // Здесь можно сохранить что-то дополнительно
+          console.log('Запомнить пользователя:', email);
+        }
+        
+        // Перенаправляем на профиль
         navigate('/profile');
-      } else {
-        setError('Неверный email или пароль');
       }
       
     } catch (err) {
-      setError(err.response?.data?.message || 'Ошибка входа');
+      console.error('Ошибка авторизации:', err);
+      
+      // Определяем понятное сообщение об ошибке
+      let errorMessage = 'Ошибка авторизации';
+      
+      if (err.message.includes('401') || err.message.includes('Unauthorized')) {
+        errorMessage = 'Неверный email или пароль';
+      } else if (err.message.includes('network')) {
+        errorMessage = 'Проблемы с подключением к серверу. Проверьте интернет-соединение';
+      } else if (err.message.includes('email')) {
+        errorMessage = 'Пользователь с таким email не найден';
+      }
+      
+      setError(errorMessage);
     } finally {
-      setIsLoading(false); // Исправлено: setIsLoading вместо setLoading
+      setIsLoading(false);
     }
   };
 
@@ -42,7 +79,7 @@ const AuthForm = ({ login }) => {
   };
 
   const handleForgotPassword = () => {
-    alert('Функция восстановления пароля будет доступна в ближайшее время');
+    navigate('/forgot-password'); // Перенаправляем на страницу восстановления пароля
   };
 
   return (
@@ -67,6 +104,7 @@ const AuthForm = ({ login }) => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            disabled={isLoading}
           />
         </div>
 
@@ -82,6 +120,7 @@ const AuthForm = ({ login }) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            disabled={isLoading}
           />
         </div>
 
@@ -92,6 +131,7 @@ const AuthForm = ({ login }) => {
               id="remember"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
+              disabled={isLoading}
             />
             Запомнить меня
           </label>
@@ -103,12 +143,27 @@ const AuthForm = ({ login }) => {
           </a>
         </div>
 
-        {error && <div style={{ color: 'red' }}>{error}</div>}
+        {error && (
+          <div className="error-message" style={{ 
+            color: '#dc3545', 
+            backgroundColor: '#f8d7da',
+            border: '1px solid #f5c6cb',
+            padding: '10px',
+            borderRadius: '4px',
+            marginBottom: '15px'
+          }}>
+            {error}
+          </div>
+        )}
 
         <button 
           type="submit" 
           className="btn btn-primary"
           disabled={isLoading}
+          style={{
+            opacity: isLoading ? 0.7 : 1,
+            cursor: isLoading ? 'not-allowed' : 'pointer'
+          }}
         >
           {isLoading ? 'Вход...' : 'Войти'}
         </button>
@@ -122,6 +177,7 @@ const AuthForm = ({ login }) => {
         <button
           className="social-btn vk"
           onClick={() => handleSocialAuth('VK')}
+          disabled={isLoading}
         >
           <FontAwesomeIcon icon={faVk} />
           ВКонтакте
@@ -129,6 +185,7 @@ const AuthForm = ({ login }) => {
         <button
           className="social-btn google"
           onClick={() => handleSocialAuth('Google')}
+          disabled={isLoading}
         >
           <FontAwesomeIcon icon={faGoogle} />
           Google

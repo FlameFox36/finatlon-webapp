@@ -1,61 +1,153 @@
+// auth/AuthService.js
+import api from './api.js';
+
 class AuthService {
   constructor() {
-    this.tokenKey = 'jwt_token';
-    this.userKey = 'user_data';
+    this.user = JSON.parse(localStorage.getItem('user') || 'null');
   }
 
-  // Сохраняем токен и данные пользователя
-  login(token, userData) {
-    localStorage.setItem(this.tokenKey, token);
-    localStorage.setItem(this.userKey, JSON.stringify(userData));
-    
-    // Устанавливаем заголовок для всех будущих запросов
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  }
-
-  // Выход из системы
-  logout() {
-    localStorage.removeItem(this.tokenKey);
-    localStorage.removeItem(this.userKey);
-    delete axios.defaults.headers.common['Authorization'];
-    window.location.href = '/login';
-  }
-
-  // Проверяем, авторизован ли пользователь
-  isAuthenticated() {
-    return !!this.getToken();
-  }
-
-  // Получаем токен из localStorage
-  getToken() {
-    return localStorage.getItem(this.tokenKey);
-  }
-
-  // Получаем данные пользователя
-  getUser() {
-    const userJson = localStorage.getItem(this.userKey);
-    return userJson ? JSON.parse(userJson) : null;
-  }
-
-  // Инициализируем axios при загрузке страницы
+  // Инициализация
   init() {
-    const token = this.getToken();
+    // Можно добавить проверку валидности токена
+    const token = api.getToken();
     if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      // Проверяем, не истек ли токен
+      if (this.isTokenExpired(token)) {
+        this.logout();
+      }
     }
   }
 
-  // Проверяем токен (простая проверка без обращения к серверу)
-  isTokenValid() {
-    const token = this.getToken();
-    if (!token) return false;
+  // Логин
+  async login(credentials) {
+    try {
+      const data = await api.login(credentials);
+      
+      if (data.accessToken) {
+        api.setToken(data.accessToken);
+        
+        // Получаем данные профиля
+        const userData = await api.getProfile();
+        this.setUser(userData);
+        
+        return {
+          success: true,
+          user: userData
+        };
+      }
+      
+      throw new Error('No token received');
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
+    }
+  }
+
+  // Регистрация
+  async register(userData) {
+    try {
+      const data = await api.register(userData);
+      
+      if (data.accessToken) {
+        api.setToken(data.accessToken);
+        
+        // Если сервер возвращает данные пользователя при регистрации
+        if (data.user) {
+          this.setUser(data.user);
+        } else {
+          // Иначе получаем профиль
+          const userData = await api.getProfile();
+          this.setUser(userData);
+        }
+        
+        return {
+          success: true,
+          data
+        };
+      }
+      
+      throw new Error('Registration failed - no token received');
+    } catch (error) {
+      console.error('Registration error:', error);
+      throw error;
+    }
+  }
+
+  // Выход
+  logout() {
+    api.removeToken();
+    localStorage.removeItem('user');
+    this.user = null;
+    window.location.href = '/login';
+  }
+
+  // Проверка аутентификации
+  isAuthenticated() {
+    const token = api.getToken();
+    return !!token && !this.isTokenExpired(token);
+  }
+
+  // Получение данных пользователя
+  getUser() {
+    return this.user;
+  }
+
+  // Сохранение данных пользователя
+  setUser(user) {
+    this.user = user;
+    localStorage.setItem('user', JSON.stringify(user));
+  }
+
+  // Получение токена
+  getToken() {
+    return api.getToken();
+  }
+
+  // Обновление профиля
+  async updateProfile(userData) {
+    try {
+      const updatedUser = await api.updateProfile(userData);
+      this.setUser(updatedUser);
+      return updatedUser;
+    } catch (error) {
+      console.error('Update profile error:', error);
+      throw error;
+    }
+  }
+
+  // Проверка истечения токена
+  isTokenExpired(token) {
+    if (!token) return true;
     
-    // Простая проверка: если токен есть, считаем его валидным
-    // В реальном приложении здесь нужно проверять срок действия
-    return true;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const expiry = payload.exp * 1000; // Конвертируем в миллисекунды
+      return Date.now() > expiry;
+    } catch {
+      return true;
+    }
+  }
+
+  // Проверка роли пользователя
+  hasRole(role) {
+    return this.user?.userType === role;
+  }
+
+  // Является ли пользователь родителем
+  isParent() {
+    return this.hasRole('parent');
+  }
+
+  // Является ли пользователь студентом
+  isStudent() {
+    return this.hasRole('student');
+  }
+
+  // Является ли пользователь учителем
+  isTeacher() {
+    return this.hasRole('teacher');
   }
 }
 
-// Создаем один экземпляр для всего приложения
 const authService = new AuthService();
 export default authService;

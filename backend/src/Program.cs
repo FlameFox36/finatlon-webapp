@@ -53,36 +53,35 @@ builder.Services.AddControllers()
     o.JsonSerializerOptions.Converters.Add(
         new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
     ));
+// ВЫНЕС CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        "AllowAllOrigins",
+        policy => policy
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+    );
+});
 
 if (builder.Environment.IsDevelopment())
 {
-    builder.Services
-    .AddOpenApi()
-    .AddCors(options =>
-    {
-        options.AddPolicy(
-            "AllowAllOrigins",
-            builder => builder
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-        );
-    }
-    );
+    builder.Services.AddOpenApi();
 }
 
-// After building
 var app = builder.Build();
+
+// Тепрье cors всегда используется
+app.UseCors("AllowAllOrigins");
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi("/openapi");
     app.UseDeveloperExceptionPage();
-    app.UseCors("AllowAllOrigins");
 }
 
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

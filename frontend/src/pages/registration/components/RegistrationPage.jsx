@@ -1,14 +1,14 @@
+// pages/registration/components/RegistrationPage.jsx
 import React, { useState } from 'react';
 import ProgressSteps from './ProgressSteps.jsx';
 import FormStep1 from './FormStep1.jsx';
 import FormStep2 from './FormStep2.jsx';
 import FormStep3 from './FormStep3.jsx';
-
-// Импортируем наш сервис авторизации
+import { useNavigate } from 'react-router-dom';
 import authService from '../../../auth/AuthService.js';
-import api from '../../../auth/api.js';
 
-function RegistrationForm() {
+function RegistrationForm({ login }) {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [userType, setUserType] = useState('');
   const [formData, setFormData] = useState({
@@ -20,8 +20,8 @@ function RegistrationForm() {
     institution: '',
     childPhone: '',
     childName: '',
-    password: '', // Добавляем поле для пароля
-    confirmPassword: '', // Добавляем подтверждение пароля
+    password: '',
+    confirmPassword: '',
     agreeTerms: false,
     newsletter: true
   });
@@ -40,7 +40,6 @@ function RegistrationForm() {
   const validateStep2 = () => {
     const newErrors = {};
     
-    // Проверка обязательных полей
     if (!formData.fullName.trim()) {
       newErrors.fullName = 'Пожалуйста, введите ваше ФИО';
     }
@@ -67,7 +66,6 @@ function RegistrationForm() {
       newErrors.institution = 'Пожалуйста, введите учебное заведение';
     }
     
-    // Для родителей проверяем телефон ребенка
     if (userType === 'parent' && !formData.childPhone.trim()) {
       newErrors.childPhone = 'Пожалуйста, введите номер телефона ребенка';
     }
@@ -76,7 +74,6 @@ function RegistrationForm() {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Добавляем валидацию для шага 3 (пароли)
   const validateStep3 = () => {
     const newErrors = {};
     
@@ -102,16 +99,16 @@ function RegistrationForm() {
 
   const handleNextStep = () => {
     if (currentStep === 2 && !validateStep2()) {
-      return; // Не переходим дальше, если есть ошибки
+      return;
     }
     if (currentStep === 3 && !validateStep3()) {
-      return; // Не отправляем, если есть ошибки
+      return;
     }
     
     if (currentStep < 3) {
       setCurrentStep(currentStep + 1);
     } else if (currentStep === 3) {
-      handleSubmit(); // На третьем шаге отправляем форму
+      handleSubmit();
     }
   };
 
@@ -123,133 +120,66 @@ function RegistrationForm() {
 
   const handleSubmit = async () => {
     if (!validateStep3()) {
-      return; // Не отправляем, если есть ошибки
+      return;
     }
 
     setIsLoading(true);
     
     try {
-      // Подготовка данных для отправки
+      // Подготовка данных для отправки в формате вашего API
       const registrationData = {
-        userType: userType,
-        fullName: formData.fullName,
         email: formData.email,
+        password: formData.password,
+        user_type: userType === 'parent' ? 'Parent' : 
+                  userType === 'student' ? 'Student' : 'Teacher',
+        // Добавьте дополнительные поля, которые принимает ваш API
+        fullName: formData.fullName,
         phone: formData.phone,
         birthDate: formData.birthDate,
         city: formData.city,
         institution: formData.institution,
-        password: formData.password,
-        agreeTerms: formData.agreeTerms,
         newsletter: formData.newsletter
       };
 
-      // Добавляем данные ребенка только для родителей
+      // Для родителей добавляем данные ребенка
       if (userType === 'parent') {
         registrationData.childPhone = formData.childPhone;
         registrationData.childName = formData.childName;
       }
 
-      // Отправляем запрос на регистрацию
-      const response = await api.post('/auth/register', registrationData);
+      // Используем AuthService для регистрации
+      const result = await authService.register(registrationData);
       
-      // Если сервер вернул токен - сохраняем его
-      if (response.data.token) {
-        // Получаем данные пользователя из ответа сервера
-        const userData = {
-          id: response.data.user.id,
-          email: response.data.user.email,
-          name: response.data.user.name,
-          userType: response.data.user.userType
-          // Добавьте другие поля, которые возвращает сервер
-        };
-        
-        // Сохраняем токен и данные пользователя
-        authService.login(response.data.token, userData);
-        
-        // Показываем сообщение об успехе
+      if (result.success) {
         setRegistrationSuccess(true);
         
-        // Через 2 секунды перенаправляем на главную страницу
-        setTimeout(() => {
-          window.location.href = '/dashboard';
-        }, 2000);
+        // Вызываем callback для обновления состояния аутентификации
+        login();
         
-      } else {
-        throw new Error('Сервер не вернул токен авторизации');
+        // Перенаправляем на профиль через 2 секунды
+        setTimeout(() => {
+          navigate('/profile');
+        }, 2000);
       }
-
+      
     } catch (error) {
       console.error('Ошибка регистрации:', error);
       
-      // Показываем ошибку пользователю
-      if (error.response && error.response.data) {
-        const serverErrors = error.response.data.errors || {};
-        
-        // Преобразуем ошибки сервера в формат для отображения
-        const displayErrors = {};
-        Object.keys(serverErrors).forEach(key => {
-          if (serverErrors[key]) {
-            displayErrors[key] = serverErrors[key];
-          }
-        });
-        
-        // Если есть общая ошибка (например, email уже занят)
-        if (error.response.data.message) {
-          displayErrors.general = error.response.data.message;
-        }
-        
-        setErrors(displayErrors);
-      } else {
-        setErrors({
-          general: 'Ошибка подключения к серверу. Попробуйте позже.'
-        });
+      // Обработка ошибок от API
+      let errorMessage = 'Ошибка регистрации. Попробуйте позже.';
+      
+      if (error.message.includes('email already exists')) {
+        errorMessage = 'Пользователь с таким email уже зарегистрирован';
+      } else if (error.message.includes('validation failed')) {
+        errorMessage = 'Проверьте правильность введенных данных';
       }
+      
+      setErrors({
+        general: errorMessage
+      });
     } finally {
       setIsLoading(false);
     }
-  };
-
-  // Сброс формы (если нужно)
-  const resetForm = () => {
-    setUserType('');
-    setFormData({
-      fullName: '',
-      email: '',
-      phone: '',
-      birthDate: '',
-      city: '',
-      institution: '',
-      childPhone: '',
-      childName: '',
-      password: '',
-      confirmPassword: '',
-      agreeTerms: false,
-      newsletter: true
-    });
-    setErrors({});
-    setCurrentStep(1);
-  };
-
-  const sendFormData = (formData) => {
-    fetch(`http://localhost/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Ошибка сети: ' + response.statusText);
-      }
-      return response.json();
-    })
-    .then(result => {
-      console.log('Ответ сервера:', result);
-    })
-    .catch(error => {
-      console.error('Ошибка при отправке данных:', error);
-    });
   };
 
   return (
@@ -262,11 +192,10 @@ function RegistrationForm() {
       <div className="registration-content">
         <ProgressSteps currentStep={currentStep} />
         
-        {/* Сообщение об успешной регистрации */}
         {registrationSuccess && (
           <div className="success-message">
             <h2>Регистрация успешно завершена!</h2>
-            <p>Вы будете перенаправлены на главную страницу...</p>
+            <p>Вы будете перенаправлены в профиль...</p>
           </div>
         )}
         
@@ -295,7 +224,7 @@ function RegistrationForm() {
             formData={formData}
             userType={userType}
             onPrevStep={handlePrevStep}
-            onSubmit={handleNextStep} // Теперь это вызывает handleSubmit
+            onSubmit={handleNextStep}
             errors={errors}
             setErrors={setErrors}
             onFormDataChange={handleFormDataChange}
@@ -303,7 +232,6 @@ function RegistrationForm() {
           />
         )}
         
-        {/* Показываем общую ошибку, если есть */}
         {errors.general && (
           <div className="error-message" style={{ 
             color: 'red', 

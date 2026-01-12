@@ -1,9 +1,9 @@
 import './App.css'
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import RegistrationForm from './pages/registration/components/RegistrationPage.jsx';
+import RegistrationPage from './pages/registration/components/RegistrationPage.jsx';
 import Homepage from './pages/home/components/Homepage.jsx';
-import Profile from './pages/profile/components/ProfilePage.jsx';
+import ProfilePage from './pages/profile/components/ProfilePage.jsx';
 import LoginPage from './pages/login/components/LoginPage.jsx';
 import Header from './pages/common/Header.jsx';
 import Footer from './pages/common/Footer.jsx';
@@ -17,30 +17,44 @@ import ProtectedRoute from './pages/profile/components/ProtectedRoute.jsx';
 import authService from './auth/AuthService.js';
 
 function App() {
-  // useEffect(() => {
-  //   authService.init();
-  // }, []);
-
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const login = () => {
-        setIsAuthenticated(true);
+  
+  // Проверяем аутентификацию при загрузке приложения
+  useEffect(() => {
+    const checkAuth = () => {
+      const authenticated = authService.isAuthenticated();
+      setIsAuthenticated(authenticated);
     };
-    const logout = () => {
-        setIsAuthenticated(false);
-    };
+    
+    checkAuth();
+    
+    // Можно добавить периодическую проверку токена
+    const interval = setInterval(checkAuth, 60000); // Каждую минуту
+    
+    return () => clearInterval(interval);
+  }, []);
 
- return (
+  const login = () => {
+    setIsAuthenticated(true);
+  };
+  
+  const logout = () => {
+    authService.logout();
+    setIsAuthenticated(false);
+  };
+
+  return (
     <div className='App'>
       <BrowserRouter>
         <Header isAuthenticated={isAuthenticated} logout={logout} /> 
         <Routes>
-          <Route path="/" element={<Homepage login={login}/>}/>
-          <Route path="/registration" element={<RegistrationForm />}/>
+          <Route path="/" element={<Homepage />}/>
+          <Route path="/registration" element={<RegistrationPage login={login}/>}/>
           <Route 
             path="/profile" 
             element={
               <ProtectedRoute isAuthenticated={isAuthenticated}>
-                <Profile logout={logout}/>
+                <ProfilePage logout={logout}/>
               </ProtectedRoute>
             }
           />
@@ -51,4 +65,5 @@ function App() {
     </div>
   );
 }
+
 export default App;
