@@ -9,12 +9,20 @@ RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
 COPY . .
 RUN dotnet publish backend.csproj -c Release -o /app/publish
 
+RUN dotnet tool install --global dotnet-ef
+ENV PATH="${PATH}:/root/.dotnet/tools"
+RUN dotnet ef migrations bundle -c AppDbContext -o /app/bundle/efbundle --self-contained -r linux-x64
+
+COPY migrations.sh /app/publish
+
 # Этап выполнения
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
 
 COPY --from=build /app/publish .
+COPY --from=build /app/bundle/efbundle ./efbundle
 
 EXPOSE 8080
 
-ENTRYPOINT ["dotnet", "backend.dll"]
+RUN chmod +x ./migrations.sh
+ENTRYPOINT ["./migrations.sh", "dotnet", "backend.dll"]
