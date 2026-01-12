@@ -1,0 +1,15 @@
+FROM mcr.microsoft.com/dotnet/sdk:10.0
+
+WORKDIR /app
+
+COPY backend.csproj .
+RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
+    dotnet restore backend.csproj
+
+COPY . .
+RUN dotnet tool install --global dotnet-ef
+
+ENV PATH="${PATH}:/root/.dotnet/tools"
+
+RUN chmod +x wait-for-db.sh
+ENTRYPOINT ["./wait-for-db.sh"]
