@@ -16,8 +16,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration
     .AddEnvironmentVariables();
 
-var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL")
-    ?? throw new InvalidConfigurationException("Environment variable DATABASE_URL is not set");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+    ?? throw new InvalidOperationException("Строка подключения к БД не найдена");
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
@@ -37,7 +37,7 @@ builder.Services
     .AddScoped<IUserContext, HttpUserContext>()
     .AddScoped<IPasswordHasher, PasswordHasher>()
     .AddScoped<IJwtTokenGenerator, JwtTokenGenerator>()
-    .AddDbContext<AppDbContext>(options => options.UseNpgsql(databaseUrl))
+    .AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString))
     .AddControllers(options => {
         options.Filters.Add<ExceptionMappingFilter>();
     });
