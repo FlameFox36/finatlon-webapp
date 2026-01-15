@@ -1,4 +1,3 @@
-using System.Data.Common;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Application.Users;
@@ -7,7 +6,6 @@ using Infrastructure.Auth;
 using Infrastructure.Services;
 using Infrastructure.Users;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Protocols.Configuration;
 using WebApi.Filters;
 using WebApi.Middlewares;
 
@@ -40,7 +38,10 @@ builder.Services
     .AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString))
     .AddControllers(options => {
         options.Filters.Add<ExceptionMappingFilter>();
-    });
+    })
+    .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(
+        new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
+    ));
 
 builder.Services.AddHttpContextAccessor();
 
@@ -48,20 +49,15 @@ builder.Services.Configure<JwtOptions>(
     builder.Configuration.GetSection(JwtOptions.SectionName)
 );
 
-builder.Services.AddControllers()
-    .AddJsonOptions(o =>
-    o.JsonSerializerOptions.Converters.Add(
-        new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
-    ));
-// ВЫНЕС CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(
-        "AllowAllOrigins",
+        name: "AllowAllOrigins",
         policy => policy
-            .AllowAnyOrigin()
+            .WithOrigins("http://localhost:3000")
             .AllowAnyMethod()
             .AllowAnyHeader()
+            .AllowCredentials()
     );
 });
 
@@ -72,9 +68,6 @@ if (builder.Environment.IsDevelopment())
 
 var app = builder.Build();
 
-// Тепрье cors всегда используется
-app.UseCors("AllowAllOrigins");
-
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi("/openapi");
@@ -82,6 +75,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseRouting();
+app.UseCors("AllowAllOrigins");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
